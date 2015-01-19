@@ -14,30 +14,19 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class SparkExample {
 
+	// Provide the program arguments as follows :   -dirTillDate/**/* 
+	// This would simulate the repository that we have in AWS for UIS messages
+	//An example, userinteractionmessages-test/raw/test/2015/01/01/00 is a path which is of format
+	//year/month/day and then hours within each day.
+	
+	
 	public static void main(String[] args) {
 		String logFile = args[0];
 		SparkConf conf = new SparkConf().setAppName("Simple Application").setMaster("local[1]");
 		JavaSparkContext sc = new JavaSparkContext(conf);
 		JavaRDD<String> logData = sc.textFile(logFile).cache();
 
-		/*JavaRDD<String> bookingUISMessages = logData.filter(new Function<String, Boolean>() {
-	        public Boolean call(String s) {
-
-	        	ObjectMapper mapper = new ObjectMapper();
-		    	try {
-					JsonNode actualObj = mapper.readTree(s);
-					JsonNode pageInfoObject = actualObj.get("pageInfo");
-					System.out.println(pageInfoObject.get("pageName"));
-				} catch (JsonProcessingException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-		    	return null;
-	        	 }
-	      });*/
+		
 
 		JavaRDD<String> allGuids = logData.map(
 				new Function<String, String>() {
