@@ -21,8 +21,16 @@ public class SparkExample {
 	
 	
 	public static void main(String[] args) {
+		if(args.length <2)
+		{
+			throw new IllegalArgumentException("Not sufficient input provided");
+		}
 		String logFile = args[0];
-		SparkConf conf = new SparkConf().setAppName("Simple Application").setMaster("local[1]");
+		String outputDir=args[1];
+		System.out.println(logFile);
+		System.out.println(outputDir); 
+		//for standalone spark application, uncommment setMaster
+		SparkConf conf = new SparkConf().setAppName("Simple Application");//.setMaster("local[1]");
 		JavaSparkContext sc = new JavaSparkContext(conf);
 		JavaRDD<String> logData = sc.textFile(logFile).cache();
 
@@ -72,7 +80,7 @@ public class SparkExample {
 	        }
 	      });
 		
-		bookingUISMessages.saveAsTextFile("abc.txt");
+		bookingUISMessages.saveAsTextFile(outputDir);
 
 	}
 
